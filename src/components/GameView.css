@@ -1,0 +1,25 @@
+#letterBoxContainer {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    margin: 5rem;
+    /* background-color: green; */
+    height: 100px;
+    padding: 5px;
+    /* border: 2px solid #4759E7; */
+}
+
+.letterBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #e7d547;
+    background-color: #4759E7;
+    color: #e7d547;
+    font-weight: bold;
+    font-size: 150%;
+    padding: 15px;
+    margin: 5px;
+    min-width: 25px;
+    flex-basis: 50px;
+}
