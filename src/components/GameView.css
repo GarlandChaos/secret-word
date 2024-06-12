@@ -23,3 +23,24 @@
     min-width: 25px;
     flex-basis: 50px;
 }
+
+input[type="text"] {
+    border-radius: 10px;
+    border: none;
+    padding: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #4759E7;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 1em;
+    text-align: center;
+}
+
+#guessInputArea{
+    display: inline-block;
+    padding: 0em 1em 1em 1em;
+    width: auto;
+    border: 2px dashed #4759E7;
+}

@@ -5,19 +5,16 @@ import "./App.css";
 
 //Javascript utils
 import { ArrayIncludes } from "./js/ArrayUtils.js";
+import { words } from "./js/Words.js";
 
 //Components
-import GameView from "./components/GameView";
-import GameOverView from "./components/GameOverView";
+import MenuView from "./components/MenuView.jsx";
+import GameView from "./components/GameView.jsx";
 import GameWinView from "./components/GameWinView.jsx";
+import GameOverView from "./components/GameOverView.jsx";
 
 function App() {
   const gameStateList = ["menu", "game", "gameWin", "gameOver"];
-  const words = [
-    { word: "apple", tip: "fruit" },
-    { word: "Ferrari", tip: "car" },
-    { word: "tetris", tip: "videogame" },
-  ];
 
   //React states
   const [score, setScore] = useState(0);
@@ -86,12 +83,7 @@ function App() {
   const GameStateFunc = () => {
     if (gameState === gameStateList[0]) {
       //menu
-      return (
-        <>
-          <h1>SECRET WORD</h1>
-          <button onClick={StartGame}>Play</button>
-        </>
-      );
+      return <MenuView startGameFunction={StartGame} />;
     } else if (gameState === gameStateList[1]) {
       //game
       return (
@@ -102,8 +94,8 @@ function App() {
           correctLetters={correctLetters}
           wrongLetters={wrongLetters}
           correctLetterFunction={AddToCorrectLetters}
-          wrongLetterFunction={() => {
-            AddToWrongLetters;
+          wrongLetterFunction={(letter) => {
+            AddToWrongLetters(letter);
             setTryCount(tryCount - 1);
           }}
         />

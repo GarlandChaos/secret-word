@@ -1,5 +1,9 @@
 import { useState } from "react";
+
+//Styles
 import "./GameView.css";
+
+//Javascript utils
 import { ArrayIncludes } from "../js/ArrayUtils.js";
 
 const GameView = ({
@@ -39,26 +43,27 @@ const GameView = ({
   return (
     <>
       {console.log("aa")}
-      <h1>Guess the word:</h1>
-      <p>Word tip: {word ? tip : ""}</p>
+      <h1>GUESS THE WORD</h1>
+      <h3>Tip: {word ? tip : ""}</h3>
       <p>You still have {tryCount} tries.</p>
       <div id="letterBoxContainer">{inputArray}</div>
-      <p>Try to guess a letter from the word:</p>
-      <form onSubmit={HandleFormSubmit}>
-        <label>
-          <span>Letter:</span>
-          <input
-            type="text"
-            maxLength="1"
-            onChange={(e) => {
-              e.preventDefault();
-              setInputLetter(e.target.value.toUpperCase());
-            }}
-            value={inputLetter}
-          />
-        </label>
-        <input type="submit" value="Send" />
-      </form>
+      <div id="guessInputArea">
+        <p>Try to guess a letter from the word:</p>
+        <form onSubmit={HandleFormSubmit}>
+          <label>
+            <input
+              type="text"
+              maxLength="1"
+              onChange={(e) => {
+                e.preventDefault();
+                setInputLetter(e.target.value.toUpperCase());
+              }}
+              value={inputLetter}
+            />
+          </label>
+          <input type="submit" value="Send" />
+        </form>
+      </div>
       <p>Wrong letters used:</p>
       <p>{wrongLetters.join(", ")}</p>
     </>
