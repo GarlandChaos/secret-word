@@ -1,8 +1,21 @@
-# React + Vite
+# Secret Word
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple game of guessing words. 
+This project uses [React](https://react.dev/).
 
-Currently, two official plugins are available:
+### Running locally:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Clone the repository:
+```bash
+git clone https://github.com/GarlandChaos/secret-word.git
+```
+2. Install the project dependencies by running:
+```bash
+npm install
+```
+3. Run locally:
+```bash
+npm run dev
+```
+
+
