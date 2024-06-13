@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 //Styles
 import "./GameView.css";
 
 //Javascript utils
-import { ArrayIncludes } from "../js/ArrayUtils.js";
+import { arrayIncludes } from "../js/ArrayUtils.js";
 
 const GameView = ({
   word,
@@ -19,7 +19,7 @@ const GameView = ({
   for (let i = 0; i < word.length; i++) {
     inputArray.push(
       <div key={i} className="letterBox">
-        {ArrayIncludes(correctLetters, word[i]) && word[i].toUpperCase()}
+        {arrayIncludes(correctLetters, word[i]) && word[i].toUpperCase()}
       </div>
     );
   }
@@ -27,17 +27,22 @@ const GameView = ({
   //React states
   const [inputLetter, setInputLetter] = useState("");
 
+  //React refs
+  let letterInputRef = useRef();
+
   //Event handlers
   const HandleFormSubmit = (e) => {
     e.preventDefault();
 
-    if (word && ArrayIncludes(word, inputLetter)) {
+    if (word && arrayIncludes(word, inputLetter)) {
       correctLetterFunction(inputLetter);
     } else {
       wrongLetterFunction(inputLetter);
     }
 
     setInputLetter("");
+
+    letterInputRef.current.focus();
   };
 
   return (
@@ -52,6 +57,7 @@ const GameView = ({
         <form onSubmit={HandleFormSubmit}>
           <label>
             <input
+              ref={letterInputRef}
               type="text"
               maxLength="1"
               onChange={(e) => {

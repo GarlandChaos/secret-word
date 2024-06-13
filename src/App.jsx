@@ -4,8 +4,11 @@ import { useState } from "react";
 import "./App.css";
 
 //Javascript utils
-import { ArrayIncludes } from "./js/ArrayUtils.js";
+import { arrayIncludes } from "./js/ArrayUtils.js";
+
+//External data
 import { words } from "./js/Words.js";
+import { GameStateList } from "./js/GameStates.js";
 
 //Components
 import MenuView from "./components/MenuView.jsx";
@@ -14,20 +17,19 @@ import GameWinView from "./components/GameWinView.jsx";
 import GameOverView from "./components/GameOverView.jsx";
 
 function App() {
-  const gameStateList = ["menu", "game", "gameWin", "gameOver"];
-
   //React states
   const [score, setScore] = useState(0);
   const [tryCount, setTryCount] = useState(3);
   const [selectedWord, setSelectedWord] = useState({});
-  const [gameState, setGameState] = useState("menu");
+  const [gameState, setGameState] = useState(GameStateList[0]);
   const [correctLetters, setCorrectLettersArray] = useState([]);
   const [wrongLetters, setWrongLettersArray] = useState([]);
 
-  if (gameState === gameStateList[1]) {
+  //Game state change check
+  if (gameState === GameStateList[1]) {
     //Checks when rendering if game is over
     if (tryCount <= 0) {
-      setGameState(gameStateList[3]);
+      setGameState(GameStateList[3]);
       setTryCount(3);
     }
 
@@ -35,7 +37,7 @@ function App() {
     let gameWon = true;
     for (let i = 0; i < selectedWord.word.length; i++) {
       console.log(selectedWord.word[i]);
-      if (!ArrayIncludes(correctLetters, selectedWord.word[i])) {
+      if (!arrayIncludes(correctLetters, selectedWord.word[i])) {
         gameWon = false;
         break;
       }
@@ -43,100 +45,80 @@ function App() {
 
     if (gameWon) {
       setScore(score + 10);
-      setGameState(gameStateList[2]);
+      setGameState(GameStateList[2]);
     }
   }
 
-  const SelectRandomWord = () => {
+  const selectRandomWord = () => {
     const index = Math.floor(Math.random() * words.length);
     setSelectedWord(words[index]);
   };
 
-  const AddToCorrectLetters = (letter) => {
+  const addToCorrectLetters = (letter) => {
     setCorrectLettersArray((previousCorrectLettersArray) => {
-      if (ArrayIncludes(previousCorrectLettersArray, letter))
+      if (arrayIncludes(previousCorrectLettersArray, letter))
         return previousCorrectLettersArray;
 
       return [...previousCorrectLettersArray, letter];
     });
   };
 
-  const AddToWrongLetters = (letter) => {
+  const addToWrongLetters = (letter) => {
     setWrongLettersArray((prevWrongLettersArray) => {
-      if (ArrayIncludes(prevWrongLettersArray, letter))
+      if (arrayIncludes(prevWrongLettersArray, letter))
         return prevWrongLettersArray;
 
       return [...prevWrongLettersArray, letter];
     });
   };
 
-  const StartGame = (keepScore = false) => {
+  const onWrongLetter = (letter) => {
+    addToWrongLetters(letter);
+    setTryCount(tryCount - 1);
+  };
+
+  const startGame = (keepScore = false) => {
     setCorrectLettersArray([]);
     setWrongLettersArray([]);
-    SelectRandomWord();
+    selectRandomWord();
     if (!keepScore) {
       setScore(0);
     }
-    setGameState(gameStateList[1]);
+    setGameState(GameStateList[1]);
   };
 
-  const GameStateFunc = () => {
-    if (gameState === gameStateList[0]) {
-      //menu
-      return <MenuView startGameFunction={StartGame} />;
-    } else if (gameState === gameStateList[1]) {
-      //game
-      return (
+  return (
+    <>
+      {/* menu */}
+      {gameState === GameStateList[0] && (
+        <MenuView startGameFunction={startGame} />
+      )}
+
+      {/* game */}
+      {gameState === GameStateList[1] && (
         <GameView
           word={selectedWord.word}
           tip={selectedWord.tip}
           tryCount={tryCount}
           correctLetters={correctLetters}
           wrongLetters={wrongLetters}
-          correctLetterFunction={AddToCorrectLetters}
-          wrongLetterFunction={(letter) => {
-            AddToWrongLetters(letter);
-            setTryCount(tryCount - 1);
-          }}
+          correctLetterFunction={addToCorrectLetters}
+          wrongLetterFunction={onWrongLetter}
         />
-      );
-    } else if (gameState === gameStateList[2]) {
-      //gameWin
-      return <GameWinView score={score} nextWordFuncion={StartGame} />;
-    } else if (gameState === gameStateList[3]) {
-      //gameOver
-      return (
+      )}
+
+      {/* gameWin */}
+      {gameState === GameStateList[2] && (
+        <GameWinView score={score} nextWordFuncion={startGame} />
+      )}
+
+      {/* gameOver*/}
+      {gameState === GameStateList[3] && (
         <GameOverView
           score={score}
-          restartGameFunction={() => StartGame(false)}
+          restartGameFunction={() => startGame(false)}
         />
-      );
-    }
-  };
-
-  // const Test = () => {
-  //   const wordsArray = words.map((w) => (
-  //     <GameView
-  //       key={w.word}
-  //       word={w.word}
-  //       tip={w.tip}
-  //       tryCount={tryCount}
-  //       correctLetters={correctLetters}
-  //       wrongLetters={wrongLetters}
-  //       correctLetterFunction={AddToCorrectLetters}
-  //       wrongLetterFunction={() => {
-  //         AddToWrongLetters;
-  //         setTryCount(tryCount - 1);
-  //       }}
-  //     />
-  //   ));
-  //   return <>{wordsArray}</>;
-  // };
-
-  return (
-    <>
-      {/* {Test()} */}
-      {GameStateFunc()}
+      )}
     </>
   );
 }
